@@ -1,6 +1,6 @@
 import numpy as np
 from optparse import OptionParser
-
+import sys
 
 def print_csv(length_N_list,f):
     np.savetxt(f, length_N_list)
@@ -218,6 +218,11 @@ def total_SAW(n, ITS):
     longest_saw = 0
 
     for i in range(0, ITS):
+        if i%100 == 0:
+            print("Iteration: %d" % i)
+            sys.stdout.flush()
+
+
         prob, N, grid = sample(n)
         sample_list.append(prob)
         length_list.append(N)
