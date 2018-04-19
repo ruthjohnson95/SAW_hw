@@ -278,8 +278,6 @@ def main():
     ITS = int(options.ITS)
     id = options.id
 
-    # DEBUGGING
-    ITS = 10
 
     # grid size
     n = 10
