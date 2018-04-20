@@ -249,6 +249,10 @@ def diagonal_SAW(n, ITS):
     longest_saw = 0
 
     for i in range(0, ITS):
+        if i % 100 == 0:
+            print("Iteration: %d" % i)
+            sys.stdout.flush()
+            
         # collect the weighted samples
         prob, N, grid = nn_sample(n)
         sample_list.append(prob)
