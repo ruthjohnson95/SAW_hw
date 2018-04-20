@@ -218,7 +218,7 @@ def total_SAW(n, ITS):
     longest_saw = 0
 
     for i in range(0, ITS):
-        if i%100 == 0:
+        if i%10000 == 0:
             print("Iteration: %d" % i)
             sys.stdout.flush()
 
@@ -249,10 +249,10 @@ def diagonal_SAW(n, ITS):
     longest_saw = 0
 
     for i in range(0, ITS):
-        if i % 100 == 0:
+        if i % 10000 == 0:
             print("Iteration: %d" % i)
             sys.stdout.flush()
-            
+
         # collect the weighted samples
         prob, N, grid = nn_sample(n)
         sample_list.append(prob)
@@ -268,7 +268,7 @@ def diagonal_SAW(n, ITS):
     # normalize
     diag_saw = np.sum(sample_list) / float(ITS)
 
-    return diag_saw, length_list, longest_saw_grid
+    return diag_saw, length_list, longest_saw_grid, sample_list
 
 
 
@@ -292,8 +292,9 @@ def main():
     n = 10
 
     # write to file
-    f_nlist = open("saw.%s.%d.Nlist" % (id, ITS), 'w')
-    f_out = open("saw.%s.%d.out" % (id, ITS), 'w')
+    f_nlist = open("saw.%s.%d.Nlist.%d" % (id, ITS, seed ), 'w')
+    f_out = open("saw.%s.%d.out.%d" % (id, ITS, seed), 'w')
+    f_chain = open("chain.%s.%d.out.%d" % (id, ITS, seed), 'w')
 
     if id == "total_saw":
         total_saw, length_N_list, longest_saw_grid = total_SAW(n, ITS)
@@ -306,7 +307,7 @@ def main():
         print_grid(longest_saw_grid, f_out)
 
     elif id == "nn_saw":
-        total_nn_saw, length_N_list, longest_saw_grid = diagonal_SAW(n, ITS)
+        total_nn_saw, length_N_list, longest_saw_grid, sample_list = diagonal_SAW(n, ITS)
         print("Estimated total nn SAW: %.4g" % total_nn_saw)
         print('\n')
         print longest_saw_grid
@@ -315,6 +316,10 @@ def main():
         f_out.write("Estimated total nn SAW: %.4g \n" % total_nn_saw)
         f_out.write("Longest SAW: " )
         print_grid(longest_saw_grid, f_out)
+
+        # write sample list to file
+        np.savetxt(f_chain, sample_list)
+
 
     else:
         print("Not a valid option...exiting")
